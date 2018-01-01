@@ -1,5 +1,2 @@
-# README
-
-## Definitions
-
-ROES: The document "RSAES-OAEP Encryption Scheme Algorithm specification and supporting documentation".
+# RSA_OAEP
+An RSA implementation in c using the GMP library, with OAEP as the padding scheme
