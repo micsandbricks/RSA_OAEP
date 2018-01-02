@@ -1,13 +1,17 @@
 #ifndef RSAEP_H
 #define RSAEP_H
 
+/*  Structure:
+    rsa_public_key
+*/
 struct rsa_public_key
 {
     mpz_t rsa_modulus;
     mpz_t public_exponent;
 };
 
-/*  rsaep
+/*  Function: 
+    rsaep
  
     Purpose:
     This is the RSA encryption primitive. The modulus (n) and 
