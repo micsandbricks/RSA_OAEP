@@ -3,6 +3,7 @@
 #include <gmp.h>
 #include "i2osp.h"
 #include "os2ip.h"
+#include "rsa_structs.h"
 
 int main()
 {

@@ -1,7 +1,7 @@
 #ifndef RSAEP_H
 #define RSAEP_H
 
-#include "key_structs.h"
+#include "rsa_structs.h"
 
 /*  Function: 
     rsaep

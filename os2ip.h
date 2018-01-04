@@ -2,6 +2,7 @@
 #define OS2IP_H
 
 #include <gmp.h>
+#include "rsa_structs.h"
 
 void os2ip(mpz_t *n, struct octet_string os);
 void int_from_base_256(mpz_t *n, int octets[], int num_octets);

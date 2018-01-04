@@ -1,7 +1,7 @@
 #ifndef RSADP_H
 #define RSADP_H
 
-#include "key_structs.h"
+#include "rsa_structs.h"
 
 void rsadp(mpz_t *m, struct rsa_private_key rsa_priv_key, mpz_t c);
 

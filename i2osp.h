@@ -3,20 +3,7 @@
 
 #include <gmp.h> /* For all handling of large numbers. */
 #include <stdlib.h> /* For malloc. */
-
-struct octet_string 
-{
-    char *str_pointer;
-    int num_octets;
-    int str_len;
-    int error_detected;
-};
-
-struct base_256_representation
-{
-    int *coeff_pointer;
-    int num_coeffs;
-};
+#include "rsa_structs.h"
 
 struct octet_string i2osp(mpz_t x, int l);
 struct base_256_representation to_base_256(mpz_t n, int l);
