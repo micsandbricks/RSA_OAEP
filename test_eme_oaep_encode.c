@@ -7,7 +7,7 @@ int main()
     struct octet_string M;
     struct octet_string P;
     struct octet_string EM;
-    int emLen = 10;
+    int emLen = 90;
 
     M.str_pointer = (char *) malloc(12 + 1);
     M.num_octets = 3;
@@ -37,6 +37,8 @@ int main()
     P.str_pointer[1] = 'x';
     P.str_pointer[2] = '0';
     P.str_pointer[3] = '0';
+    P.str_pointer[4] = '\0';
+
 
     EM = eme_oaep_encode(M, P, emLen);
 }
