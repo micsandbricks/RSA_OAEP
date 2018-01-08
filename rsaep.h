@@ -1,7 +1,11 @@
 #ifndef RSAEP_H
 #define RSAEP_H
 
+#include <stdio.h>
+
 #include "rsa_structs.h"
+
+void rsaep(mpz_t *c, rsa_public_key rsa_pub_key, mpz_t m);
 
 /*  Function: 
     rsaep
@@ -13,13 +17,13 @@
 
     Input:
     mpz_t *c: The integer that is generated.
-    struct rsa_public_key rsa_pub_key: An RSA public key, where we get n and e.
+    rsa_public_key rsa_pub_key: An RSA public key, where we get n and e.
     mpz_t m: A message integer used to generate c. 
 
     Output:
     Void.
 */
-void rsaep(mpz_t *c, struct rsa_public_key rsa_pub_key, mpz_t m)
+void rsaep(mpz_t *c, rsa_public_key rsa_pub_key, mpz_t m)
 {
     mpz_t rsa_mod_sub_1;
     int m_out_of_range;

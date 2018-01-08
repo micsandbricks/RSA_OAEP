@@ -7,7 +7,7 @@
 
 #include <openssl/sha.h>
 
-struct octet_string eme_oaep_encode(struct octet_string M, struct octet_string P, int emLen);
+octet_string eme_oaep_encode(octet_string M, octet_string P, int emLen);
 
 /*  Function:
     eme_oaep_encode
@@ -17,13 +17,13 @@ struct octet_string eme_oaep_encode(struct octet_string M, struct octet_string P
     "encoding parameters" P and a hash function (here SHA256 is used).
 
     Input:
-    struct octet_string M: The message octet string we want to encode,
+    octet_string M: The message octet string we want to encode,
     can at most be of length em_len - 1 - 2*h_len.
-    struct octet_string P: The encoding parameters used to encode M.
+    octet_string P: The encoding parameters used to encode M.
     int em_len: The intended length in octets of the encoded message.
 
     Output:
-    struct octet_string EM: The encoded message, an octet string of length 
+    octet_string EM: The encoded message, an octet string of length 
     em_len.
 
     NOTE:
@@ -34,11 +34,12 @@ struct octet_string eme_oaep_encode(struct octet_string M, struct octet_string P
     close to the input limit, is in the order of exabytes.
     
 */
-struct octet_string eme_oaep_encode(struct octet_string M, struct octet_string P, int em_len)
+octet_string eme_oaep_encode(octet_string M, octet_string P, int em_len)
 {
 
     int i;
-    struct octet_string PS;
+    octet_string PS;
+    octet_string DB;
 
     int h_len = SHA256_DIGEST_LENGTH;
     int message_upper_limit = em_len - 2*h_len - 1;
@@ -53,24 +54,10 @@ struct octet_string eme_oaep_encode(struct octet_string M, struct octet_string P
         printf("Message too long.");
     }
 
-    PS.str_pointer = (char *) malloc((ps_num_octets * 4) + 1);
-    PS.str_len = (ps_num_octets * 4);
+    PS.str_pointer = (char *) malloc(ps_num_octets + 1);
     PS.num_octets = ps_num_octets;
     PS.error_detected = 0;
     
-    *(PS.str_pointer) = '\\';
-    *(PS.str_pointer + 1) = 'x';
-    *(PS.str_pointer + 2) = '0';
-    *(PS.str_pointer + 3) = '0';
-    for (i = 3; i < PS.str_len; i += 4)
-    {
-        *(PS.str_pointer + i) = '\\';
-        *(PS.str_pointer + (i + 1)) = 'x';
-        *(PS.str_pointer + (i + 2)) = '0';
-        *(PS.str_pointer + (i + 3)) = '0';
-    }
-    *(PS.str_pointer + (PS.str_len - 1)) = '\0';
-
     p_hash =  (unsigned char *) malloc(h_len + 1);
     P_hashing_successful = generate_sha_256_hash(P.str_pointer, 
                                                 P.str_len,

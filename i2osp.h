@@ -5,14 +5,13 @@
 #include <stdlib.h> /* For malloc. */
 #include "rsa_structs.h"
 
-struct octet_string i2osp(mpz_t x, int l);
-struct base_256_representation to_base_256(mpz_t n, int l);
-char hex_character(int hex_num);
-void base_256_to_hex(struct octet_string os, struct base_256_representation bs_256);
+octet_string i2osp(mpz_t x, int l);
+base_256_representation to_base_256(mpz_t n, int l);
+
 
 /*  i20sp
-
-
+ 
+ 
     Purpose:
     This function converts an integer to an octet string
     according to the specification in ROES.
@@ -25,8 +24,11 @@ void base_256_to_hex(struct octet_string os, struct base_256_representation bs_2
     octet_string: A representation of the octet string
     obtained from the integer x.
 */
-struct octet_string i2osp(mpz_t x, int l)
+octet_string i2osp(mpz_t x, int l)
 {
+
+    int i;
+
     /* A boolean that is set to 1 if x => 256^l,
        is set to 0 otherwise. */
     int x_too_big;
@@ -35,10 +37,10 @@ struct octet_string i2osp(mpz_t x, int l)
        set to 256^l. */
     mpz_t x_upper_bound;
 
-    struct base_256_representation bs_256;
+    base_256_representation bs_256;
 
     /* The representation of the generated octet string.*/
-    struct octet_string os;
+    octet_string os;
 
     mpz_init(x_upper_bound);
     mpz_ui_pow_ui(x_upper_bound, 256, l);
@@ -50,9 +52,7 @@ struct octet_string i2osp(mpz_t x, int l)
     {
         printf("Integer too large.");
         free(os.str_pointer);
-        os.str_pointer = NULL;
         os.num_octets = 0;
-        os.str_len = 0;
         os.error_detected = 1;
         return os;      
     }
@@ -61,12 +61,12 @@ struct octet_string i2osp(mpz_t x, int l)
     bs_256 = to_base_256(x, l);
 
     /* Allocate pointer (4 chars per octet and 1 char for terminating character)*/
-    os.str_pointer = (char *) malloc((4*l)+1); 
-    os.str_len = 4*l;
+    os.str_pointer = (char *) malloc(l+1); 
     os.num_octets = l;
     os.error_detected = 0;
 
-    base_256_to_hex(os, bs_256);
+    for (i = 0; i < os.num_octets; i++)
+        *(os.str_pointer + i) = *(bs_256.str_pointer + i);
 
     return os;
 }
@@ -84,7 +84,7 @@ struct octet_string i2osp(mpz_t x, int l)
     base_256_representation n_256_rep: A representation of the
     integer n in representation base 256.
 */
-struct base_256_representation to_base_256(mpz_t n, int l)
+base_256_representation to_base_256(mpz_t n, int l)
 {
 
     int i = 1;
@@ -95,7 +95,7 @@ struct base_256_representation to_base_256(mpz_t n, int l)
     mpz_t base;
     mpz_t d;
 
-    struct base_256_representation n_256_rep;
+    base_256_representation n_256_rep;
 
     n_256_rep.coeff_pointer = (int *) malloc(l);
     n_256_rep.num_coeffs = l;
@@ -134,76 +134,4 @@ struct base_256_representation to_base_256(mpz_t n, int l)
     return n_256_rep;
 }
 
-/*  base_256_to_hex
-
-    Purpose:
-    Takes a representation of a number in representation base 256 and generates
-    a string that takes all the coefficients from the representation base and
-    concatenates all corresponding hex representations "\xdd" (d being integers).
-
-    Input:
-    struct octet_string os: The octet_string struct that we are filling in.
-    struct base_256_representation bs_256: The base 256 we are taking our hex codes
-    from.
-
-    Output:
-    Void
-*/
-void base_256_to_hex(struct octet_string os, struct base_256_representation bs_256)
-{
-
-    int i;
-    int os_index = 0;;
-    int coeff_decimal;
-    char first_hex_code_char;
-    char second_hex_code_char;
-
-    for (i = 0; i < bs_256.num_coeffs; i++)
-    {
-        coeff_decimal = *(bs_256.coeff_pointer + i);
-        first_hex_code_char = hex_character(coeff_decimal / 16);
-        second_hex_code_char = hex_character(coeff_decimal % 16);
-
-        *(os.str_pointer + os_index) = '\\';
-        os_index++;
-        *(os.str_pointer + os_index) = 'x';
-        os_index++;
-        *(os.str_pointer + os_index) = first_hex_code_char;
-        os_index++;
-        *(os.str_pointer + os_index) = second_hex_code_char;
-        os_index++;
-    }
-    *(os.str_pointer + os_index) = '\0';
-}
-
-/*  hex_character
-
-    Purpose:
-    A function used to get a hexadecimal character for an integer.
-
-    Input:
-    int hex_num: The number we want a hex character for.
-
-    Output:
-    char: The hexadecimal character corresponding to hex_num.
-*/
-char hex_character(int hex_num)
-{
-    switch (hex_num){
-        case 10:
-            return 'a';
-        case 11:
-            return 'b';
-        case 12:
-            return 'c';
-        case 13:
-            return 'd';
-        case 14:
-            return 'e';
-        case 15:
-            return 'f';
-        default:
-            return hex_num + '0';
-    }
-}
 #endif

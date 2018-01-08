@@ -19,11 +19,6 @@ int generate_sha_256_hash(void* hash_source, unsigned long source_length, unsign
     if (!SHA256_Final(md, &context))
         return 0;
 
-    for (i = 0; i < SHA256_DIGEST_LENGTH; i++)
-    {
-        printf("%02X", md[i]);
-    }
-
     return 1;
 }
 

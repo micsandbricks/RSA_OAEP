@@ -3,7 +3,7 @@
 
 #include "rsa_structs.h"
 
-void rsadp(mpz_t *m, struct rsa_private_key rsa_priv_key, mpz_t c);
+void rsadp(mpz_t *m, rsa_private_key rsa_priv_key, mpz_t c);
 
 /*  Function:
     rsadp 
@@ -15,13 +15,13 @@ void rsadp(mpz_t *m, struct rsa_private_key rsa_priv_key, mpz_t c);
     
     Input:
     mpz_t *m: The message decrypted from the ciphertext c.
-    struct rsa_private_key K: An RSA public key, where we get n and e.
+    rsa_private_key K: An RSA public key, where we get n and e.
     mpz_t c: Ciphertext representative from which we decrypt a message.
 
     Output:
     Void.
 */
-void rsadp(mpz_t *m, struct rsa_private_key K, mpz_t c)
+void rsadp(mpz_t *m, rsa_private_key K, mpz_t c)
 {
      
     mpz_t rsa_mod_sub_1;
